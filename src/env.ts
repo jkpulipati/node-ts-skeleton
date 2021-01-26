@@ -47,11 +47,11 @@ export const env = {
     },
     db: {
         type: 'mongodb',
-        host: '0.0.0.0',
+        host: 'cluster0-shard-00-02.zmzdg.mongodb.net',
         port: 27017,
         username: 'krishna',
         password: 'krishna',
-        database: 'mongodb+srv://cluster0.zmzdg.mongodb.net/test',
+        database: 'natours',
         synchronize: false,
         logging: 'error',
     },
