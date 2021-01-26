@@ -3,7 +3,7 @@ import * as path from 'path';
 
 import * as pkg from '../package.json';
 import {
-    getOsEnv, getOsEnvOptional, getOsPath, getOsPaths, normalizePort, toBool, toNumber
+    getOsEnv, getOsEnvOptional, getOsPath, getOsPaths, normalizePort, toBool
 } from './lib/env';
 
 /**
@@ -46,14 +46,14 @@ export const env = {
         output: getOsEnv('LOG_OUTPUT'),
     },
     db: {
-        type: getOsEnv('TYPEORM_CONNECTION'),
-        host: getOsEnvOptional('TYPEORM_HOST'),
-        port: toNumber(getOsEnvOptional('TYPEORM_PORT')),
-        username: getOsEnvOptional('TYPEORM_USERNAME'),
-        password: getOsEnvOptional('TYPEORM_PASSWORD'),
-        database: getOsEnv('TYPEORM_DATABASE'),
-        synchronize: toBool(getOsEnvOptional('TYPEORM_SYNCHRONIZE')),
-        logging: getOsEnv('TYPEORM_LOGGING'),
+        type: 'mongoose',
+        host: 'localhost',
+        port: 27017,
+        username: 'krishna',
+        password: 'krishna',
+        database: 'mongodb+srv://krishna:krishna@cluster0.zmzdg.mongodb.net/test',
+        synchronize: false,
+        logging: 'error',
     },
     graphql: {
         enabled: toBool(getOsEnv('GRAPHQL_ENABLED')),
