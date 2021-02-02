@@ -47,12 +47,12 @@ export const env = {
     },
     db: {
         type: 'mongodb',
-        host: 'cluster0-shard-00-02.zmzdg.mongodb.net',
+        host: 'cluster0.zmzdg.mongodb.net',
         port: 27017,
         username: 'krishna',
         password: 'krishna',
-        database: 'natours',
-        synchronize: false,
+        database: 'test',
+        synchronize: true,
         logging: 'error',
     },
     graphql: {
