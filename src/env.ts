@@ -51,6 +51,7 @@ export const env = {
         port: 27017,
         username: 'krishna',
         password: 'krishna',
+        url: 'mongodb+srv://krishna:krishna@cluster0.zmzdg.mongodb.net/natours',
         database: 'test',
         synchronize: true,
         logging: 'error',

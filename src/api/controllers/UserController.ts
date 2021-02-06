@@ -1,27 +1,28 @@
 import { Type } from 'class-transformer';
-import { IsNotEmpty, IsUUID, ValidateNested } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsUUID, ValidateNested } from 'class-validator';
 import {
-    Body, Get, JsonController, OnUndefined, Param, Post, Req
+    Authorized, Body, Delete, Get, JsonController, OnUndefined, Param, Post, Put, Req
 } from 'routing-controllers';
 import { OpenAPI, ResponseSchema } from 'routing-controllers-openapi';
 
 import { UserNotFoundError } from '../errors/UserNotFoundError';
-import { Tours } from '../models/User';
+import { User } from '../models/User';
 import { UserService } from '../services/UserService';
 import { PetResponse } from './PetController';
 
 class BaseUser {
     @IsNotEmpty()
-    public name: string;
+    public firstName: string;
 
     @IsNotEmpty()
-    public summary: string;
+    public lastName: string;
+
+    @IsEmail()
+    @IsNotEmpty()
+    public email: string;
 
     @IsNotEmpty()
-    public description: string;
-
-    @IsNotEmpty()
-    public price: string;
+    public username: string;
 }
 
 export class UserResponse extends BaseUser {
@@ -38,6 +39,7 @@ class CreateUserBody extends BaseUser {
     public password: string;
 }
 
+@Authorized()
 @JsonController('/users')
 @OpenAPI({ security: [{ basicAuth: [] }] })
 export class UserController {
@@ -48,50 +50,51 @@ export class UserController {
 
     @Get()
     @ResponseSchema(UserResponse, { isArray: true })
-    public find(): Promise<Tours[]> {
+    public find(): Promise<User[]> {
         return this.userService.find();
     }
 
     @Get('/me')
     @ResponseSchema(UserResponse, { isArray: true })
-    public findMe(@Req() req: any): Promise<Tours[]> {
+    public findMe(@Req() req: any): Promise<User[]> {
         return req.user;
     }
 
     @Get('/:id')
     @OnUndefined(UserNotFoundError)
     @ResponseSchema(UserResponse)
-    public one(@Param('id') id: string): Promise<Tours | undefined> {
+    public one(@Param('id') id: string): Promise<User | undefined> {
         return this.userService.findOne(id);
     }
 
     @Post()
     @ResponseSchema(UserResponse)
-    public create(@Body() body: CreateUserBody): Promise<Tours> {
-        const user = new Tours();
-        user.name = body.name;
-        user.description = body.description;
-        user.summary = body.summary;
-        user.price = body.price;
+    public create(@Body() body: CreateUserBody): Promise<User> {
+        const user = new User();
+        user.email = body.email;
+        user.firstName = body.firstName;
+        user.lastName = body.lastName;
+        user.password = body.password;
+        user.username = body.username;
 
         return this.userService.create(user);
     }
 
-    // @Put('/:id')
-    // @ResponseSchema(UserResponse)
-    // public update(@Param('id') id: string, @Body() body: BaseUser): Promise<Tour> {
-    //     const user = new User();
-    //     user.email = body.email;
-    //     user.firstName = body.firstName;
-    //     user.lastName = body.lastName;
-    //     user.username = body.username;
+    @Put('/:id')
+    @ResponseSchema(UserResponse)
+    public update(@Param('id') id: string, @Body() body: BaseUser): Promise<User> {
+        const user = new User();
+        user.email = body.email;
+        user.firstName = body.firstName;
+        user.lastName = body.lastName;
+        user.username = body.username;
 
-    //     return this.userService.update(id, user);
-    // }
+        return this.userService.update(id, user);
+    }
 
-    // @Delete('/:id')
-    // public delete(@Param('id') id: string): Promise<void> {
-    //     return this.userService.delete(id);
-    // }
+    @Delete('/:id')
+    public delete(@Param('id') id: string): Promise<void> {
+        return this.userService.delete(id);
+    }
 
 }
